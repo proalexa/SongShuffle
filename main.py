@@ -13,15 +13,19 @@ def readfile():
     return f.read()
 
 def search(textToSearch):
-    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class":"yt-uix-tile-link"})[0]["href"]
+    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class":"yt-uix-tile-link"})[1]["href"]
+
+
 
 artists = readfile().split("\n\n")
 artists = [i.split("\n") for i in artists]
 songs = [i for j in artists for i in j]
 songs = [i.split(" - ") for i in songs]
-
 while True:
-    url = search(songs[random.randint(0, len(songs))][0]+" "+songs[random.randint(0, len(songs))][1])
+    randomnum = random.randint(0, len(songs))
+    cursong = songs[randomnum][0]+" "+songs[randomnum][1]
+    print(cursong)
+    url = search(cursong)
     video = pafy.new(url)
     sleeptime = video.length
     best = video.getbest()
