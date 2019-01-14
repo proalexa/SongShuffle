@@ -1,14 +1,15 @@
-import os
 import urllib.request
 import random
 import pafy
 import vlc
 from bs4 import BeautifulSoup
 import time
+import os
+
 
 
 def readfile():
-    f = open(os.getcwd()+"\\Songs.txt", "r")
+    f = open(os.path.dirname(os.path.abspath(__file__))+"/Songs.txt", "r")
     return f.read()
 
 def search(textToSearch):
@@ -20,7 +21,7 @@ songs = [i for j in artists for i in j]
 songs = [i.split(" - ") for i in songs]
 
 while True:
-    url = search(songs[random.randint(0, len(songs))][0])
+    url = search(songs[random.randint(0, len(songs))][0]+" "+songs[random.randint(0, len(songs))][1])
     video = pafy.new(url)
     sleeptime = video.length
     best = video.getbest()
