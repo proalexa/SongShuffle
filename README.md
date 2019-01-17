@@ -1,5 +1,5 @@
 # SongShuffle
-Place your favourite songs in Songs.txt and it will automatically find it on youtube and play random song.
+Place your favourite songs in Songs.txt and it will automatically find it on youtube and play random a song.
 ## Requirements
 _**[Python 3.X.X](https://www.python.org/downloads/release/python-372/)**_ (Tested on [Python3.6.6](https://www.python.org/downloads/release/python-366/))<br />
 _**[VLC Player](https://www.videolan.org/vlc/download-windows.html)**_
