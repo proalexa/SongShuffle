@@ -5,6 +5,7 @@ import vlc
 from bs4 import BeautifulSoup
 import time
 import os
+import sys
 
 
 
@@ -13,25 +14,42 @@ def readfile():
     return f.read()
 
 def search(textToSearch):
-    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class":"yt-uix-tile-link"})[1]["href"]
-
+    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class":"yt-uix-tile-link"})[0]["href"]
+def play(url):
+    video = pafy.new(url)
+    sleeptime = video.length
+    playurl = video.getbestaudio().url
+    p = vlc.MediaPlayer(playurl)
+    p.play()
+    time.sleep(sleeptime)
+    p.stop()
 
 
 artists = readfile().split("\n\n")
 artists = [i.split("\n") for i in artists]
 songs = [i for j in artists for i in j]
 songs = [i.split(" - ") for i in songs]
-while True:
-    randomnum = random.randint(0, len(songs))
-    cursong = songs[randomnum][0]+" "+songs[randomnum][1]
-    print(cursong)
-    url = search(cursong)
-    video = pafy.new(url)
-    sleeptime = video.length
-    best = video.getbest()
-    # playurl = best.url
-    playurl = video.getbestaudio().url
-    p = vlc.MediaPlayer(playurl)
-    p.play()
-    time.sleep(sleeptime)
-    p.stop()
+
+def main():
+    try:
+        if len(sys.argv) == 2:
+            inSongs = False
+            for i,j in enumerate(songs):
+                if sys.argv[1].lower() in j[0].lower():
+                    res = search(songs[i][0]+" "+songs[i][1])
+                    inSongs = True
+            if not inSongs:
+                res = search(sys.argv[1])
+            print(inSongs)
+            play(res)
+
+            
+        while True:
+            randomnum = random.randint(0, len(songs))
+            cursong = songs[randomnum][0]+" "+songs[randomnum][1]
+            url = search(cursong)
+            play(url)
+    except:
+        main()
+        
+main()
