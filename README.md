@@ -12,6 +12,7 @@ pip3 install beautifulsoup4
 pip3 install python-vlc
 ```
 ### Adding Songs
+Edit `Songs.txt` file.<br/>
 Formating rules are:
 - Every song must have **artist specified**
 - Songs and artists must be separeted by **" - "**
@@ -24,4 +25,4 @@ Adding it to path is awesome!
 ## Usage
 ```python main.py [OPTIONAL: First song to play]```
 ## Credits
-created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
+Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
