@@ -33,15 +33,17 @@ songs = [i for j in artists for i in j]
 songs = [i.split(" - ") for i in songs]
 
 if len(sys.argv) == 2:
-    inSongs = False
-    for i, j in enumerate(songs):
-        if sys.argv[1].lower() in j[0].lower():
-            res = search(songs[i][0] + " " + songs[i][1])
-            inSongs = True
-    if inSongs == False:
-        res = search(" ".join(sys.argv[1]))
-    print(res)
-    play(res)
+    # inSongs = False
+    # for i, j in enumerate(songs):
+    #     if sys.argv[1].lower() in j[0].lower():
+    #         res = search(songs[i][0] + " " + songs[i][1])
+    #         inSongs = True
+    # if inSongs == False:
+    #     res = search(" ".join(sys.argv[1]))
+    # print(res)
+    # play(res)
+    # Doesn't work well :)
+    play(search(sys.argv[1]))
 
 def main():
     try:
