@@ -1,5 +1,5 @@
 # SongShuffle
-Place your favourite songs in Songs.txt and it will automatically find it on youtube and play random a song.
+Place your favourite songs in Songs.txt and it will automatically find it on youtube and play a random song.
 ## Disclaimer
 **Still in BETA**<br/>
 **NO ANIMALS WERE HURT DURING THE PROGRAMMING**<br/>
