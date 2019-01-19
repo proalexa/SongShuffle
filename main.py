@@ -37,7 +37,8 @@ def play(url):
     p.stop()
 
 args = getArgs()
-songUrl = 0
+r = random.choice(songs)
+songUrl = search(r[0]+" - "+r[1])
 
 if not args.song == None:
     if args.listed == True:
@@ -48,8 +49,6 @@ if not args.song == None:
         songUrl = search(args.song)
 
 while True:
-    if songUrl == 0:
-        break
     play(songUrl)
     if args.autoplay == True:
         break
