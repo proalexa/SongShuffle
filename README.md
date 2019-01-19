@@ -27,6 +27,13 @@ You can see how my songs are **formated**.
 Adding it to path is awesome!
 
 ## Usage
-```python main.py [OPTIONAL: First song to play]```
+`--song` or `-s` for searching a song (default: search on youtube)
+`--listed` or `-l` for searching in `Songs.txt`
+`--noautoplay` or `-a` to play just once
+```python main.py -h```
+## Changelog
+- Added Argparser for CLI
+- Fixed errors
+- Updated README
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
