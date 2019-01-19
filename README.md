@@ -27,10 +27,10 @@ You can see how my songs are **formated**.
 Adding it to path is awesome!
 
 ## Usage
-`--song` or `-s` for searching a song (default: search on youtube)
-`--listed` or `-l` for searching in `Songs.txt`
-`--noautoplay` or `-a` to play just once
-```python main.py -h```
+`--song` or `-s` for searching a song (default: search on youtube)<br />
+`--listed` or `-l` for searching in `Songs.txt`<br />
+`--noautoplay` or `-a` to play just once<br />
+`--help` or `-h` for usage
 ## Changelog
 - Added Argparser for CLI
 - Fixed errors
