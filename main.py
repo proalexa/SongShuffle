@@ -51,7 +51,7 @@ while True:
     if songUrl == 0:
         break
     play(songUrl)
-    if args.autoplay == False:
+    if args.autoplay == True:
         break
     r = random.choice(songs)
     songUrl = search(r[0]+" - "+r[1])
