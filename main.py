@@ -6,12 +6,22 @@ from bs4 import BeautifulSoup
 import time
 import os
 import sys
-
+import argparse
 
 def readfile():
     f = open(os.path.dirname(os.path.abspath(__file__))+"/Songs.txt", "r")
     return f.read()
 
+songs = [i.split(" - ") for i in [i for j in [i.split("\n") for i in readfile().split("\n\n")] for i in j]]
+
+def getArgs():
+    global songs
+    parser = argparse.ArgumentParser(description='Play songs')
+    parser.add_argument("--song",'-s',type=str,help='Search songs online.',default=None, metavar="Song")
+    parser.add_argument("--listed",'-l',help='Search songs in Songs.txt file.',default=False, action='store_const',const=True)
+    parser.add_argument("--noautoplay","-a",help='Add to end after song.', default=True,dest='autoplay', action='store_const',const=False)
+    args = parser.parse_args()
+    return args
 
 def search(textToSearch):
     return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[0]["href"]
@@ -26,32 +36,26 @@ def play(url):
     time.sleep(sleeptime)
     p.stop()
 
+args = getArgs()
+songUrl = 0
 
-artists = readfile().split("\n\n")
-artists = [i.split("\n") for i in artists]
-songs = [i for j in artists for i in j]
-songs = [i.split(" - ") for i in songs]
+if not args.song == None:
+    if args.listed == True:
+        for i in songs:
+            if args.song in i[0]:
+                songUrl = search(i[0]+' '+i[1])
+    else:
+        songUrl = search(args.song)
 
-if len(sys.argv) == 2:
-    # inSongs = False
-    # for i, j in enumerate(songs):
-    #     if sys.argv[1].lower() in j[0].lower():
-    #         res = search(songs[i][0] + " " + songs[i][1])
-    #         inSongs = True
-    # if inSongs == False:
-    #     res = search(" ".join(sys.argv[1]))
-    # print(res)
-    # play(res)
-    # Doesn't work well :)
-    play(search(sys.argv[1]))
+while True:
+    if songUrl == 0:
+        break
+    play(songUrl)
+    if args.autoplay == False:
+        break
+    r = random.choice(songs)
+    songUrl = search(r[0]+" - "+r[1])
 
-def main():
-    try:
-        while True:
-            randomnum = random.randint(0, len(songs))
-            cursong = songs[randomnum][0] + " " + songs[randomnum][1]
-            url = search(cursong)
-            play(url)
-    except:
-        main()
-main()
+
+
+    
