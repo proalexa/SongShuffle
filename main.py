@@ -23,8 +23,8 @@ def getArgs():
     args = parser.parse_args()
     return args
 
-def search(textToSearch):
-    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[0]["href"]
+def search(textToSearch,id=0):
+    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[id]["href"]
 
 
 def play(url):
@@ -43,14 +43,14 @@ songUrl = search(r[0]+" - "+r[1])
 if not args.song == None:
     if args.listed == True:
         for i in songs:
-            if args.song in i[0]:
+            if args.song.lower() in i[0].lower():
                 songUrl = search(i[0]+' '+i[1])
     else:
         songUrl = search(args.song)
 
 while True:
     play(songUrl)
-    if args.autoplay == True:
+    if args.autoplay == False:
         break
     r = random.choice(songs)
     songUrl = search(r[0]+" - "+r[1])
