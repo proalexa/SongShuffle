@@ -1,4 +1,5 @@
 .vscode/settings.json
 mainF.py
-./setup.py
+setup.py
+.build/
 
