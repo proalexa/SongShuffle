@@ -35,5 +35,9 @@ Adding it to path is awesome!
 - Added Argparser for CLI
 - Fixed errors
 - Updated README
+## Known Issues
+- Sometimes error 403: Access Denied of URL
+- Sometimes scraper picks garbage
+- Freezed msi sometimes gives IndexError: list index out of range 
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
