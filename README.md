@@ -38,6 +38,7 @@ Adding it to path is awesome!
 ## Known Issues
 - Sometimes error 403: Access Denied of URL
 - Sometimes scraper picks garbage
-- Freezed msi sometimes gives IndexError: list index out of range 
+- Freezed msi sometimes gives IndexError: list index out of range
+- Sometimes length of video is shortened.
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
