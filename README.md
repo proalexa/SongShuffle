@@ -15,6 +15,10 @@ pip3 install youtube-dl
 pip3 install beautifulsoup4
 pip3 install python-vlc
 ```
+or
+```
+pip3 install -r requirements.txt
+```
 ### Adding Songs
 Edit `Songs.txt` file.<br/>
 Formating rules are:
