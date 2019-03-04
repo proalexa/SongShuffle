@@ -44,7 +44,7 @@ Adding it to path is awesome!
 - Updated README
 ## Known Issues
 - Sometimes error 403: Access Denied of URL
-- Sometimes scraper picks garbage
+- Sometimes scraper picks garbage (Caused by playlist found on youtube)
 - Freezed msi sometimes gives IndexError: list index out of range
 - Sometimes length of video is shortened.
 ## Credits
