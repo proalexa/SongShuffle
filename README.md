@@ -38,6 +38,7 @@ Adding it to path is awesome!
 ## TODO
 - Replace txt with SQL Database for easier installation
 - Replace VLC with PyGame for portability
+- Integrate YouTube autoplay feature
 ## Changelog
 - Added Argparser for CLI
 - Fixed errors
