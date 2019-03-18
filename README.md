@@ -36,7 +36,7 @@ Adding it to path is awesome!
 `--noautoplay` or `-a` to play just once<br />
 `--help` or `-h` for usage
 ## TODO
-- Replace txt with SQL Database for easier installation
+- Replace txt with optional SQL Database for easier installation
 - Replace VLC with PyGame for portability
 - Integrate YouTube autoplay feature
 ## Changelog
