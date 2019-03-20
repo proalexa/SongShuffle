@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import urllib.request
 import random
 import pafy
@@ -10,8 +11,7 @@ import argparse
 
 
 def readfile():
-    # f = open(os.path.dirname(os.path.abspath(__file__))+"/Songs.txt", "r")
-    f = open("./Songs.txt", "r")
+    f = open(os.path.dirname(os.path.abspath(__file__))+"/Songs.txt", "r")
     return f.read()
 
 
@@ -20,8 +20,8 @@ songs = [i.split(" - ") for i in [i for j in [i.split("\n")
 
 
 def getArgs():
-    global songs
-    parser = argparse.ArgumentParser(description='Play songs')
+    parser = argparse.ArgumentParser(
+        description='Play songs from youtube from CLI!')
     parser.add_argument("--song", '-s', type=str,
                         help='Search songs online.', default=None, metavar="Song")
     parser.add_argument("--id", '-i', type=int,
@@ -30,6 +30,10 @@ def getArgs():
                         default=False, action='store_const', const=True)
     parser.add_argument("--noautoplay", "-a", help='Add to end after song.',
                         default=True, dest='autoplay', action='store_const', const=False)
+    parser.add_argument("--add", type=str, metavar="add",
+                        help="Add song to database", default=None)
+    parser.add_argument("--remove", type=str, metavar="remove",
+                        help="Remove song from database", default=None)
     args = parser.parse_args()
     return args
 
