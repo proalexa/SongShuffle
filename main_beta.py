@@ -43,10 +43,11 @@ class Song:
             playurl = audio.getbest().url
         else:
             playurl = audio.getbestaudio().url
-        p = vlc.MediaPlayer(playurl)
+        self.p = vlc.MediaPlayer(playurl)
         p.play()
-        time.sleep(sleeptime)
-        p.stop()
+
+    def stop(self):
+        self.p.stop()
 
 
 def getArgs():
@@ -70,4 +71,3 @@ def getArgs():
 
 args = getArgs()
 if args.Song = None:
-    
