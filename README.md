@@ -36,15 +36,16 @@ Adding it to path is awesome!
 `--noautoplay` or `-a` to play just once<br />
 `--help` or `-h` for usage
 ## TODO
-- Replace txt with SQL Database for easier installation
+- Replace txt with optional SQL Database for easier installation
 - Replace VLC with PyGame for portability
+- Integrate YouTube autoplay feature
 ## Changelog
 - Added Argparser for CLI
 - Fixed errors
 - Updated README
 ## Known Issues
 - Sometimes error 403: Access Denied of URL
-- Sometimes scraper picks garbage
+- Sometimes scraper picks garbage (Caused by playlist found on youtube)
 - Freezed msi sometimes gives IndexError: list index out of range
 - Sometimes length of video is shortened.
 ## Credits
