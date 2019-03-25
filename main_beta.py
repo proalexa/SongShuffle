@@ -11,14 +11,25 @@ import argparse
 import sqlite3
 
 
-PATH_TO_SONGS = "~/home/$USER/Desktop/"
+class SQLController:
+    def __init__(self, filename):
+        self.filename = filename
+        self.conn = sqlite3.connect(self.filename)
+        self.c = self.conn.cursor()
+        try:
+            self.c.execute("SELECT * FROM Songs")
+        except sqlite3.OperationalError:
+            self.c.execute(
+                "CREATE TABLE Songs(Id INTEGER PRIMARY KEY AUTOINCREMENT,Title varchar(128),Artist varchar(128))")
 
-conn = sqlite3.connect(PATH_TO_SONGS+'songs.db')
-c = conn.cursor()
+    def fetchSongs(self):
+        songs = [Song(i[1], i[2])
+                 for i in self.c.execute("SELECT * FROM Songs")]
+        return songs
 
-
-def search(textToSearch, id=0):
-    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[id]["href"]
+    def add(self, title, artist):
+        self.c.execute(
+            "INSERT INTO Songs(Title,Artist) VALUES ({},{})".format(title, artist))
 
 
 class Song:
@@ -38,16 +49,20 @@ class Song:
 
     def play(self, video=False):
         audio = pafy.new(self.url)
-        sleeptime = audio.length
+        self.sleeptime = audio.length
         if video:
             playurl = audio.getbest().url
         else:
             playurl = audio.getbestaudio().url
         self.p = vlc.MediaPlayer(playurl)
-        p.play()
+        self.p.play()
 
     def stop(self):
         self.p.stop()
+
+
+def search(textToSearch, id=0):
+    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[id]["href"]
 
 
 def getArgs():
@@ -70,4 +85,10 @@ def getArgs():
 
 
 args = getArgs()
-if args.Song = None:
+sqlc = SQLController("./songs.db")
+if args.add:
+    songname = args.add.split("-")
+    sqlc.add(songname[0], songname[1])
+
+
+[print(i.title, i.artist) for i in sqlc.fetchSongs()]
