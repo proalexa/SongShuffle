@@ -20,7 +20,7 @@ class SQLController:
             self.c.execute("SELECT * FROM Songs")
         except sqlite3.OperationalError:
             self.c.execute(
-                "CREATE TABLE Songs(Id INTEGER PRIMARY KEY AUTOINCREMENT,Title varchar(128),Artist varchar(128))")
+                "CREATE TABLE Songs(Id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,Title varchar(128),Artist varchar(128))")
 
     def fetchSongs(self):
         songs = [Song(i[1], i[2])
@@ -28,8 +28,19 @@ class SQLController:
         return songs
 
     def add(self, title, artist):
+        # AUTOINCREMENT DOESNT WORK SO THIS IS NECESSARY
+        try:
+            nextid = max([i[0]
+                          for i in self.c.execute("SELECT * FROM Songs")])+1
+        except:
+            nextid = 0
         self.c.execute(
-            "INSERT INTO Songs(Title,Artist) VALUES ({},{})".format(title, artist))
+            "INSERT INTO Songs(Title,Artist,Id) VALUES (\"{}\",\"{}\",\"{}\")".format(title, artist, nextid))
+        self.conn.commit()
+
+    def remove(self, sid):
+        self.c.execute("DELETE FROM Songs WHERE Id={\"{}\"}".format(sid))
+        self.conn.commit()
 
 
 class Song:
@@ -87,8 +98,9 @@ def getArgs():
 args = getArgs()
 sqlc = SQLController("./songs.db")
 if args.add:
-    songname = args.add.split("-")
-    sqlc.add(songname[0], songname[1])
+    songtitle = ' '.join(args.add.split("-")[0].split("."))
+    songartist = ' '.join(args.add.split("-")[1].split("."))
+    sqlc.add(songtitle, songartist)
 
 
-[print(i.title, i.artist) for i in sqlc.fetchSongs()]
+[print(sid, i.title, i.artist) for sid, i in enumerate(sqlc.fetchSongs())]
