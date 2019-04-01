@@ -3,9 +3,10 @@ Place your favourite songs in Songs.txt and it will automatically find it on you
 ## Disclaimer
 **Still in BETA**<br/>
 **NO ANIMALS WERE HURT DURING THE PROGRAMMING**<br/>
-**I'm NOT responsible for any damage**
+**I'm NOT responsible for any damage**<br/>
+**Documentation is DEPRECATED, Updating soon!**
 ## Requirements
-_**[Python 3.X.X](https://www.python.org/downloads/release/python-372/)**_ (Tested on [Python3.6.6](https://www.python.org/downloads/release/python-366/))<br />
+_**[Python 3.X.X](https://www.python.org/downloads/release/python-372/)**_ (Tested on [Python3.6.6](https://www.python.org/downloads/release/python-366/) and [Python3.7.0](https://www.python.org/downloads/release/python-370/))<br />
 _**[VLC Player](https://www.videolan.org/vlc/download-windows.html)**_
 ## Installation
 ### Basic
@@ -19,7 +20,7 @@ or
 ```
 pip3 install -r requirements.txt
 ```
-### Adding Songs
+### Adding Songs DEPRECATED
 Edit `Songs.txt` file.<br/>
 Formating rules are:
 - Every song must have **artist specified**
@@ -30,23 +31,24 @@ You can see how my songs are **formated**.
 ### Optional
 Adding it to path is awesome!
 
-## Usage
+## Usage DEPRECATED
 `--song` or `-s` for searching a song (default: search on youtube)<br />
 `--listed` or `-l` for searching in `Songs.txt`<br />
 `--noautoplay` or `-a` to play just once<br />
 `--help` or `-h` for usage
 ## TODO
-- Replace txt with optional SQL Database for easier installation
 - Replace VLC with PyGame for portability
 - Integrate YouTube autoplay feature
+- Update README
 ## Changelog
 - Added Argparser for CLI
+- Added Shuffle
+- Added SQLite3
+- Song list is not necessary
 - Fixed errors
 - Updated README
 ## Known Issues
 - Sometimes error 403: Access Denied of URL
-- Sometimes scraper picks garbage (Caused by playlist found on youtube)
-- Freezed msi sometimes gives IndexError: list index out of range
 - Sometimes length of video is shortened.
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
