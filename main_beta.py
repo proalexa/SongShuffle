@@ -12,51 +12,45 @@ import sqlite3
 
 
 class SQLController:
-    def __init__(self, filename):
+    def __init__(self,filename):
         self.filename = filename
-        self.conn = sqlite3.connect(self.filename)
-        self.c = self.conn.cursor()
-        try:
-            self.c.execute("SELECT * FROM Songs")
-        except sqlite3.OperationalError:
-            self.c.execute(
-                "CREATE TABLE Songs(Id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,Title varchar(128),Artist varchar(128))")
-
+        self.connection = sqlite3.connect(filename)
+        self.cursor = self.connection.cursor()
+        sqlCreate = """ CREATE TABLE IF NOT EXISTS Songs (
+                                        ID integer PRIMARY KEY AUTOINCREMENT,
+                                        title varchar(100) NOT NULL,
+                                        artist varchar(100),
+                                        sid int DEFAULT 0
+                                    );"""
+        self.cursor.execute(sqlCreate)
+    def add(self,title,artist):
+        self.cursor.execute("INSERT INTO Songs (title,artist) VALUES (?,?);",(title,artist))
+        self.connection.commit()
+    def remove(self,iid):
+        removedSong = self.cursor.execute("SELECT * FROM Songs WHERE ID=?;",iid)
+        self.cursor.execute("DELETE FROM Songs WHERE ID=?;",iid)
+        self.connection.commit()
+        return removedSong
     def fetchSongs(self):
-        songs = [Song(i[1], i[2])
-                 for i in self.c.execute("SELECT * FROM Songs")]
-        return songs
-
-    def add(self, title, artist):
-        # AUTOINCREMENT DOESNT WORK SO THIS IS NECESSARY
-        try:
-            nextid = max([i[0]
-                          for i in self.c.execute("SELECT * FROM Songs")])+1
-        except:
-            nextid = 0
-        self.c.execute(
-            "INSERT INTO Songs(Title,Artist,Id) VALUES (\"{}\",\"{}\",\"{}\")".format(title, artist, nextid))
-        self.conn.commit()
-
-    def remove(self, sid):
-        self.c.execute("DELETE FROM Songs WHERE Id={\"{}\"}".format(sid))
-        self.conn.commit()
+        return [Song(i[1],i[2],sid=i[3]) for i in self.cursor.execute("SELECT * FROM Songs;")]
+            
 
 
 class Song:
-    def __init__(self, title, artist, id=0):
+    def __init__(self, title, artist, sid=0):
         self.title = title
         self.artist = artist
-        self.id = id
+        self.sid = sid
+
+    def findBestId(self):
         while True:
-            try:
-                if len(search(title+" - "+artist, self.id)) > 44:
-                    self.id += 1
-                else:
-                    self.url = search(title+" - "+artist, self.id)
-                    break
-            except:
-                self.id += 1
+            if len(search(self.title+" - "+self.artist, self.sid)) > 44:
+                self.sid += 1
+                print("next sid:{}".format(self.sid))
+            else:
+                self.url = search(self.title+" - "+self.artist, self.sid)
+                break
+        return True
 
     def play(self, video=False):
         audio = pafy.new(self.url)
@@ -72,18 +66,14 @@ class Song:
         self.p.stop()
 
 
-def search(textToSearch, id=0):
-    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[id]["href"]
+def search(textToSearch, iid=0):
+    return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[iid]["href"]
 
 
 def getArgs():
     parser = argparse.ArgumentParser(
         description='Play songs from youtube from CLI!')
-    parser.add_argument("--song", '-s', type=str,
-                        help='Search songs online.', default=None, metavar="Song")
-    parser.add_argument("--id", '-i', type=int,
-                        help='Id of song foung on youtube', default=0, metavar="id")
-    parser.add_argument("--listed", '-l', help='Search songs in Songs.txt file.',
+    parser.add_argument("--sync", '-s', help='Find Best SID for songs on youtube.',
                         default=False, action='store_const', const=True)
     parser.add_argument("--noautoplay", "-a", help='Add to end after song.',
                         default=True, dest='autoplay', action='store_const', const=False)
@@ -101,6 +91,11 @@ if args.add:
     songtitle = ' '.join(args.add.split("-")[0].split("."))
     songartist = ' '.join(args.add.split("-")[1].split("."))
     sqlc.add(songtitle, songartist)
+if args.remove:
+    print(sqlc.remove(args.remove))
+
+if args.sync:
+    songlist = sqlc.fetchSongs()
 
 
 [print(sid, i.title, i.artist) for sid, i in enumerate(sqlc.fetchSongs())]
