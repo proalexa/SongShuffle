@@ -2,3 +2,4 @@ pafy
 youtube-dl
 beautifulsoup4
 python-vlc
+PrettyTable
