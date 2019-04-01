@@ -9,10 +9,11 @@ import os
 import sys
 import argparse
 import sqlite3
-
+from prettytable import PrettyTable
+from tqdm import tqdm
 
 class SQLController:
-    def __init__(self,filename):
+    def __init__(self, filename):
         self.filename = filename
         self.connection = sqlite3.connect(filename)
         self.cursor = self.connection.cursor()
@@ -23,17 +24,25 @@ class SQLController:
                                         sid int DEFAULT 0
                                     );"""
         self.cursor.execute(sqlCreate)
-    def add(self,title,artist):
-        self.cursor.execute("INSERT INTO Songs (title,artist) VALUES (?,?);",(title,artist))
+
+    def add(self, title, artist):
+        self.cursor.execute(
+            "INSERT INTO Songs (title,artist) VALUES (?,?);", (title, artist))
         self.connection.commit()
-    def remove(self,iid):
-        removedSong = self.cursor.execute("SELECT * FROM Songs WHERE ID=?;",iid)
-        self.cursor.execute("DELETE FROM Songs WHERE ID=?;",iid)
+
+    def remove(self, iid):
+        removedSong = self.cursor.execute(
+            "SELECT * FROM Songs WHERE ID=?;", iid)
+        self.cursor.execute("DELETE FROM Songs WHERE ID=?;", iid)
         self.connection.commit()
         return removedSong
+
     def fetchSongs(self):
-        return [Song(i[1],i[2],sid=i[3]) for i in self.cursor.execute("SELECT * FROM Songs;")]
-            
+        return [Song(i[1], i[2], sid=i[3]) for i in self.cursor.execute("SELECT * FROM Songs;")]
+
+    def updateSid(self, iid, sid):
+        self.cursor.execute("UPDATE Songs SET sid=? WHERE ID=?",(sid,iid))
+        self.connection.commit()
 
 
 class Song:
@@ -42,15 +51,15 @@ class Song:
         self.artist = artist
         self.sid = sid
 
-    def findBestId(self):
+    def sync(self):
         while True:
-            if len(search(self.title+" - "+self.artist, self.sid)) > 44:
+            searched = search(self.title+" - "+self.artist, self.sid)
+            if len(searched) > 44:
                 self.sid += 1
-                print("next sid:{}".format(self.sid))
             else:
-                self.url = search(self.title+" - "+self.artist, self.sid)
+                self.url = searched
                 break
-        return True
+        return self.sid
 
     def play(self, video=False):
         audio = pafy.new(self.url)
@@ -75,11 +84,11 @@ def getArgs():
         description='Play songs from youtube from CLI!')
     parser.add_argument("--sync", '-s', help='Find Best SID for songs on youtube.',
                         default=False, action='store_const', const=True)
-    parser.add_argument("--noautoplay", "-a", help='Add to end after song.',
-                        default=True, dest='autoplay', action='store_const', const=False)
+    parser.add_argument("--echo", '-e', help='Print all listed Songs.',
+                        default=False, action='store_const', const=True)
     parser.add_argument("--add", type=str, metavar="add",
                         help="Add song to database", default=None)
-    parser.add_argument("--remove", type=str, metavar="remove",
+    parser.add_argument("--remove", type=int, metavar="remove",
                         help="Remove song from database", default=None)
     args = parser.parse_args()
     return args
@@ -87,15 +96,26 @@ def getArgs():
 
 args = getArgs()
 sqlc = SQLController("./songs.db")
+
+songlist = sqlc.fetchSongs()
+if args.echo:
+    t = PrettyTable()
+    t.field_names = ["ID", "Title", "Artist", "SID"]
+    for i,j in enumerate(songlist):
+        t.add_row([i,j.title,j.artist,j.sid])
+    print(t)
 if args.add:
     songtitle = ' '.join(args.add.split("-")[0].split("."))
     songartist = ' '.join(args.add.split("-")[1].split("."))
     sqlc.add(songtitle, songartist)
 if args.remove:
-    print(sqlc.remove(args.remove))
+    print("Do you want to remove this song:"+songlist[args.remove].title+" by "+songlist[args.remove].artist+"?[Y/n]")
+    an = input()
+    if an=="Y" or an=="" or an=="y":
+        print(sqlc.remove(args.remove)+" removed.")
 
 if args.sync:
-    songlist = sqlc.fetchSongs()
-
-
-[print(sid, i.title, i.artist) for sid, i in enumerate(sqlc.fetchSongs())]
+    with tqdm(total=len(songlist)) as probar:
+        for i,j in enumerate(songlist):
+            sqlc.updateSid(i+1,j.sync())
+            probar.update(1)
