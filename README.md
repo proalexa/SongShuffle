@@ -1,7 +1,7 @@
 # SongShuffle
 Youtube songs for terminal geeks!
 ## Requirements
-_**[Python 3.X.X](https://www.python.org/downloads/release/python-372/)**_ (Tested on [Python3.6.6](https://www.python.org/downloads/release/python-366/) and [Python3.7.0](https://www.python.org/downloads/release/python-370/))<br />
+_**[Python 3.X.X](https://www.python.org/downloads/release/python-373/)**_ (Tested on [Python3.6.6](https://www.python.org/downloads/release/python-366/) and [Python3.7.0](https://www.python.org/downloads/release/python-370/))<br />
 _**[VLC Player](https://www.videolan.org/vlc/download-windows.html)**_
 ## Installation
 ```
