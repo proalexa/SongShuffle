@@ -51,6 +51,7 @@ class Song:
         self.title = title
         self.artist = artist
         self.sid = sid
+        self.url = search(self.title+" - "+self.artist, self.sid)
 
     def sync(self):
         while True:
