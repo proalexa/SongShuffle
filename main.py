@@ -103,9 +103,8 @@ def getArgs():
 
 
 args = getArgs()
-
 if not args.ignoredb:
-    sqlc = SQLController("./songs.db")
+    sqlc = SQLController(os.path.realpath(__file__))
     songlist = sqlc.fetchSongs()
     if args.shuffle:
         while True:
