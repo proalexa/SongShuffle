@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 import urllib.request
 import random
 import pafy
@@ -95,6 +95,8 @@ def getArgs():
                         help="Remove song from database", default=None)
     parser.add_argument("--ignoredb", '-i', help='Don\'t create songs.db Just playsongs without it.',
                         default=False, action='store_const', const=True)
+    parser.add_argument("--byid", '-b', help='Play song by songdb id',
+                        default=False, action='store_const', const=True)
     parser.add_argument("--play", "-p", type=str, metavar="play",
                         help="Playsongs", default=None)
     parser.add_argument("--shuffle", '-8', help='Shuffle Songs in SQLite3 database.',
@@ -141,8 +143,12 @@ else:
         print("Nothing to do! exiting!")
         exit()
 if args.play:
-        songtitle = ' '.join(args.play.split("-")[0].split("."))
-        songartist = ' '.join(args.play.split("-")[1].split("."))
+        if args.byid:
+            songtitle = songlist[int(args.play)].title
+            songartist = songlist[int(args.play)].artist
+        else:
+            songtitle = ' '.join(args.play.split("-")[0].split("."))
+            songartist = ' '.join(args.play.split("-")[1].split("."))
         songToPlay = Song(songtitle, songartist)
         songToPlay.sync()
         songToPlay.play()
