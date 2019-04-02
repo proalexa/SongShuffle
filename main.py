@@ -51,7 +51,7 @@ class Song:
         self.title = title
         self.artist = artist
         self.sid = sid
-        self.url = search(self.title+" - "+self.artist, self.sid)
+        
 
     def sync(self):
         while True:
@@ -64,6 +64,7 @@ class Song:
         return self.sid
 
     def play(self, video=False):
+        self.url = search(self.title+" - "+self.artist, self.sid)
         audio = pafy.new(self.url)
         self.sleeptime = audio.length
         if video:
