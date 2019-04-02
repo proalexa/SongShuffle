@@ -104,7 +104,7 @@ def getArgs():
 
 args = getArgs()
 if not args.ignoredb:
-    sqlc = SQLController('.'join(os.path.realpath(__file__).split("/")[:-1])+"songs.db")
+    sqlc = SQLController('/'.join(os.path.realpath(__file__).split("/")[:-1])+"/songs.db")
     songlist = sqlc.fetchSongs()
     if args.shuffle:
         while True:
