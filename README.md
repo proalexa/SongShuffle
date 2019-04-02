@@ -33,7 +33,6 @@ Example:<br />
 ## TODO
 - Replace VLC with PyGame for portability
 - Integrate YouTube autoplay feature
-- Update README
 ## Changelog
 - Added Argparser for CLI
 - Added Shuffle
