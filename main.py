@@ -51,7 +51,6 @@ class Song:
         self.title = title
         self.artist = artist
         self.sid = sid
-        
 
     def sync(self):
         while True:
@@ -95,11 +94,14 @@ def getArgs():
                         help="Remove song from database", default=None)
     parser.add_argument("--ignoredb", '-i', help='Don\'t create songs.db Just playsongs without it.',
                         default=False, action='store_const', const=True)
+    # Instead of this I will implement searchby argument
     parser.add_argument("--byid", '-b', help='Play song by songdb id',
                         default=False, action='store_const', const=True)
     parser.add_argument("--play", "-p", type=str, metavar="play",
                         help="Playsongs", default=None)
     parser.add_argument("--shuffle", '-8', help='Shuffle Songs in SQLite3 database.',
+                        default=False, action='store_const', const=True)
+    parser.add_argument("--video", '-v', help='Show music Video.',
                         default=False, action='store_const', const=True)
     args = parser.parse_args()
     return args
@@ -107,13 +109,13 @@ def getArgs():
 
 args = getArgs()
 if not args.ignoredb:
-    sqlc = SQLController('/'.join(os.path.realpath(__file__).split("/")[:-1])+"/songs.db")
+    sqlc = SQLController(
+        '/'.join(os.path.realpath(__file__).split("/")[:-1])+"/songs.db")
     songlist = sqlc.fetchSongs()
     if args.shuffle:
         while True:
             songToPlay = random.choice(songlist)
-            songToPlay.sync()
-            songToPlay.play()
+            songToPlay.play(video=args.video)
             sleep(songToPlay.sleeptime)
             songToPlay.stop()
     if args.echo:
@@ -143,14 +145,13 @@ else:
         print("Nothing to do! exiting!")
         exit()
 if args.play:
-        if args.byid:
-            songtitle = songlist[int(args.play)].title
-            songartist = songlist[int(args.play)].artist
-        else:
-            songtitle = ' '.join(args.play.split("-")[0].split("."))
-            songartist = ' '.join(args.play.split("-")[1].split("."))
-        songToPlay = Song(songtitle, songartist)
-        songToPlay.sync()
-        songToPlay.play()
-        sleep(songToPlay.sleeptime)
-        songToPlay.stop()
+    if args.byid:
+        songtitle = songlist[int(args.play)].title
+        songartist = songlist[int(args.play)].artist
+    else:
+        songtitle = ' '.join(args.play.split("-")[0].split("."))
+        songartist = ' '.join(args.play.split("-")[1].split("."))
+    songToPlay = Song(songtitle, songartist)
+    songToPlay.play(video=args.video)
+    sleep(songToPlay.sleeptime)
+    songToPlay.stop()
