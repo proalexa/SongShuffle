@@ -32,11 +32,8 @@ class SQLController:
         self.connection.commit()
 
     def remove(self, iid):
-        removedSong = self.cursor.execute(
-            "SELECT * FROM Songs WHERE ID=?;", iid)
-        self.cursor.execute("DELETE FROM Songs WHERE ID=?;", iid)
+        self.cursor.execute("DELETE FROM Songs WHERE ID=?;", (iid,))
         self.connection.commit()
-        return removedSong
 
     def fetchSongs(self):
         return [Song(i[1], i[2], sid=i[3]) for i in self.cursor.execute("SELECT * FROM Songs;")]
@@ -133,7 +130,7 @@ if not args.ignoredb:
               songlist[args.remove].title+" by "+songlist[args.remove].artist+"?[Y/n]")
         an = input()
         if an == "Y" or an == "" or an == "y":
-            print(sqlc.remove(args.remove)+" removed.")
+            print(songlist[args.remove].title+" removed.")
 
     if args.sync:
         with tqdm(total=len(songlist)) as probar:
