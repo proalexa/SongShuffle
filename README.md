@@ -24,8 +24,8 @@ pip3 install -r requirements.txt
 `--add` adds song, takes 1 argument (Read formatting for more!).<br />
 `--ignoredb` or `-i` ignores database file.<br />
 `--play` or `-p` plays song, takes 1 argument (Read formatting for more!).<br />
-`--shuffle` or `-8` plays songs in shuffling order.
-`--byid` play song with ID (first column).
+`--shuffle` or `-8` plays songs in shuffling order.<br />
+`--byid` play song with ID (first column).<br />
 `--video` or `-v` Shows music video for song that is playing.
 ## Formatting
 - Spaces are represented by `.`(dot).<br />
