@@ -36,6 +36,7 @@ Example:<br />
 - Replace VLC with PyGame for portability
 - Integrate YouTube autoplay feature
 - Add Songshell for control
+- Finish my custom argparser
 ## Changelog
 - Added Argparser for CLI
 - Added Shuffle
