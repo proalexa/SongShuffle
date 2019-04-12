@@ -130,6 +130,7 @@ if not args.ignoredb:
               songlist[args.remove].title+" by "+songlist[args.remove].artist+"?[Y/n]")
         an = input()
         if an == "Y" or an == "" or an == "y":
+            sqlc.remove(args.remove)
             print(songlist[args.remove].title+" removed.")
 
     if args.sync:
