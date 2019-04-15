@@ -25,8 +25,9 @@ pip3 install -r requirements.txt
 `--ignoredb` or `-i` ignores database file.<br />
 `--play` or `-p` plays song, takes 1 argument (Read formatting for more!).<br />
 `--shuffle` or `-8` plays songs in shuffling order.<br />
-`--byid` play song with ID (first column).<br />
-`--video` or `-v` Shows music video for song that is playing.
+Add `--byud` next to `--play` to play song by it's id.<br />
+Add `--video` or `-v` to play Song's music spot.<br/>
+Add `--ytautoplay` or `-y` next to `--play` to turn on youtube autoplay feature. **_NEW_**
 ## Formatting
 - Spaces are represented by `.`(dot).<br />
 - Split title and artist with `-`(dash).<br />

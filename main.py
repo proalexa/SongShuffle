@@ -13,6 +13,8 @@ from prettytable import PrettyTable
 from tqdm import tqdm
 
 
+
+
 class SQLController:
     def __init__(self, filename):
         self.filename = filename
@@ -59,6 +61,17 @@ class Song:
                 break
         return self.sid
 
+    def autoplay(self, video=False):
+        self.url = getNextUrl(self.url)
+        audio = pafy.new(self.url)
+        self.sleeptime = audio.length
+        if video:
+            playurl = audio.getbest().url
+        else:
+            playurl = audio.getbestaudio().url
+        self.p = vlc.MediaPlayer(playurl)
+        self.p.play()
+
     def play(self, video=False):
         self.url = search(self.title+" - "+self.artist, self.sid)
         audio = pafy.new(self.url)
@@ -76,6 +89,20 @@ class Song:
 
 def search(textToSearch, iid=0):
     return "https://www.youtube.com" + BeautifulSoup(urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urllib.parse.quote(textToSearch)).read(), 'html.parser').findAll("a", attrs={"class": "yt-uix-tile-link"})[iid]["href"]
+
+
+def getNextUrl(url):
+    text = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(text, "html.parser")
+    link = "/none"
+    for i in soup.findAll("a"):
+        if len(i["href"]) == 20 and "content-link" in i["class"]:
+            link = i["href"]
+            print(i["title"])
+            break
+        else:
+            continue
+    return "https://www.youtube.com"+link
 
 
 def getArgs():
@@ -99,6 +126,8 @@ def getArgs():
     parser.add_argument("--shuffle", '-8', help='Shuffle Songs in SQLite3 database.',
                         default=False, action='store_const', const=True)
     parser.add_argument("--video", '-v', help='Show music Video.',
+                        default=False, action='store_const', const=True)
+    parser.add_argument("--ytautoplay", '-y', help='Youtube autoplay feature',
                         default=False, action='store_const', const=True)
     args = parser.parse_args()
     return args
@@ -149,7 +178,13 @@ if args.play:
     else:
         songtitle = ' '.join(args.play.split("-")[0].split("."))
         songartist = ' '.join(args.play.split("-")[1].split("."))
+    
     songToPlay = Song(songtitle, songartist)
     songToPlay.play(video=args.video)
     sleep(songToPlay.sleeptime)
     songToPlay.stop()
+    if args.ytautoplay:
+        while True:
+            songToPlay.autoplay()
+            sleep(songToPlay.sleeptime)
+            songToPlay.stop()
