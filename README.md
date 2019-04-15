@@ -35,18 +35,18 @@ Example:<br />
 `./main.py --add Song.With.Spaces-Some.Artist`
 ## TODO
 - Replace VLC with PyGame for portability
-- Integrate YouTube autoplay feature
+- ~~Integrate YouTube autoplay feature~~-
 - Add Songshell for control
+- Add URL saving to database
 - Finish my custom argparser
 ## Changelog
-- Added Argparser for CLI
-- Added Shuffle
-- Added SQLite3
-- Song list is not necessary
-- Fixed errors
-- Updated README
+- Added `--byid`
+- Added `--video`
+- Added `--ytautoplay`
+- Argument system reworked
 ## Known Issues
 - Sometimes error 403: Access Denied of URL
 - Sometimes length of video is shortened.
+- Remove from database doesn't work
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
