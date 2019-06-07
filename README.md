@@ -48,5 +48,6 @@ Example:<br />
 - Sometimes error 403: Access Denied of URL
 - Sometimes length of video is shortened.
 - Remove from database doesn't work
+- Never versions of VLC doesn't work well.
 ## Credits
 Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
