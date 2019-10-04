@@ -50,4 +50,4 @@ Example:<br />
 - Remove from database doesn't work
 - Never versions of VLC doesn't work well.
 ## Credits
-Created by [Alexa Ognjanovic](https://www.github.com/proalexa/)
+Created by [Alexa Ognjanovic](https://www.github.com/GrbavaCigla/)
